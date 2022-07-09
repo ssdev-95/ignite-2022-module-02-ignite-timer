@@ -4,6 +4,5 @@ coverage
 dist
 node_modules
 yarn.lock
-package.json
 *.md
 .git
