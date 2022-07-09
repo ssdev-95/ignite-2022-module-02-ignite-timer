@@ -1,35 +1,35 @@
-import styled from 'styled-components'
+import styled from "styled-components"
 
 export const HeaderContainer = styled.header`
-	padding: 1.85rem 0.75rem;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	border-bottom: 1px solid ${props=>props.theme['gray-300']};
+  padding: 1.85rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid ${(props) => props.theme["gray-300"]};
 
-	& > .logo {
-		color: ${props => props.theme['green-500']};
-	}
+  & > .logo {
+    color: ${(props) => props.theme["green-500"]};
+  }
 
-	& > nav {
-		diaplay: flex;
-		gap: 1rem;
+  & > nav {
+    diaplay: flex;
+    gap: 1rem;
 
-		a {
-			color: ${props => props.theme['gray-300']};
-			border-top: 3px solid transparent;
-			border-bottom: 3px solid transparent;
+    a {
+      color: ${(props) => props.theme["gray-300"]};
+      border-top: 3px solid transparent;
+      border-bottom: 3px solid transparent;
 
-			text-decoration: none;
+      text-decoration: none;
 
-			&.active {
-				color: ${props => props.theme['green-300']};
-			}
+      &.active {
+        color: ${(props) => props.theme["green-300"]};
+      }
 
-			&:hover {
-				color: ${props => props.theme['green-300']};
-				border-bottom: 3px solid ${props => props.theme['green-500']};
-			}
-		}
-	}
+      &:hover {
+        color: ${(props) => props.theme["green-300"]};
+        border-bottom: 3px solid ${(props) => props.theme["green-500"]};
+      }
+    }
+  }
 `
