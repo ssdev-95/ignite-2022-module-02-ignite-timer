@@ -1,5 +1,5 @@
 //import { FormEvent } from 'react'
-import { Play } from "phosphor-react"
+import { Play } from 'phosphor-react'
 
 import {
   Button,
@@ -9,16 +9,16 @@ import {
   HomeContainer,
   CountdownWrapper,
   MinuteAmountInput,
-} from "./styles"
+} from './styles'
 
 export function Home() {
-  const options = ["Deploy na sexta", "TDD", "Docker", "XGH"]
+  const options = ['Deploy na sexta', 'TDD', 'Docker', 'XGH']
 
   return (
     <HomeContainer>
       <form onSubmit={(e) => e.preventDefault()}>
         <FormContainer>
-          <label htmlFor="task">I'll study</label>
+          <label htmlFor="task">I&apos;ll study</label>
           <TextInput id="task" placeholder="Deploy na sexta." list="tasks" />
           <datalist id="tasks">
             {options.map((data) => (

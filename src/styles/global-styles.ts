@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
 	* {
@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
 		font-family: 'Roboto', sans-serif;
 
 		&:focus {
-			box-shadow: 0 0 0 2px ${(props) => props.theme["green-300"]};
+			box-shadow: 0 0 0 2px ${(props) => props.theme['green-300']};
 		}
 
 		scroll-behavior: smooth;
@@ -16,7 +16,7 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
   body {
-		background: ${(props) => props.theme["gray-900"]};
+		background: ${(props) => props.theme['gray-900']};
 		color: ${(props) => props.theme.white};
 	}
 `
