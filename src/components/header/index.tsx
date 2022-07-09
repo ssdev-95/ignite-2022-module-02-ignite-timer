@@ -1,11 +1,11 @@
-import { NavLink } from 'react-router-dom'
-import { Timer, Coffee, Scroll } from 'phosphor-react'
-import { HeaderContainer } from './styles'
+import { NavLink } from "react-router-dom"
+import { Timer, Coffee, Scroll } from "phosphor-react"
+import { HeaderContainer } from "./styles"
 
 export function Header() {
   return (
     <HeaderContainer>
-      <Coffee size={46} className="logo" />
+      <Coffee size={46} className="logo" weight="duotone" />
       <nav>
         <NavLink to="/" title="Timer">
           <Timer size={46} />
