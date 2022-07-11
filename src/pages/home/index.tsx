@@ -29,18 +29,17 @@ export function Home() {
     defaultValues: { task: '', minutesAmount: 0 },
   })
 
-	const {
-		cycles,
-		setCycles,
-		timePassed,
-		activeCycle,
-		activeCycleId,
-		setTimePassed,
-		setActiveCycleId
-	} = useCycle()
+  const {
+    setCycles,
+    activeCycle,
+    activeCycleId,
+    setTimePassed,
+    setActiveCycleId,
+  } = useCycle()
 
   useEffect(() => {
     let interval: Interval
+    alert(typeof register)
 
     if (activeCycle) {
       interval = setInterval(() => {
@@ -83,29 +82,29 @@ export function Home() {
   const task = watch('task')
   const minutesAmount = watch('minutesAmount')
   const isSubmitDisabled = !task.length || !minutesAmount
+  function onSubmit(data: NewCycleFormData) {
+    onCreateNewTask(data)
+    reset()
+  }
   return (
     <>
       <HomeContainer>
-        <form onSubmit={handleSubmit(onCreateNewTask)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <FormControll register={register} />
 
           <CountdownTimer />
 
           {activeCycle ? (
             <Button
-							onClick={handleStopCountdown}
-							variant="danger"
-							type="button"
-							title="Stop"
-						>
+              onClick={handleStopCountdown}
+              variant="danger"
+              type="button"
+              title="Stop"
+            >
               <HandPalm size={24} />
             </Button>
           ) : (
-            <Button
-							disabled={isSubmitDisabled}
-							type="submit"
-							title="Start"
-						>
+            <Button disabled={isSubmitDisabled} type="submit" title="Start">
               <Play size={24} />
             </Button>
           )}
