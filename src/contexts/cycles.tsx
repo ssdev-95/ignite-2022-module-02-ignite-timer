@@ -14,7 +14,7 @@ interface ProviderProps {
 	 children: ReactNode
 }
 
-type SetState<T> = <Dispatch<SetStateAction<T>>>
+type SetState<T> = Dispatch<SetStateAction<T>>
 
 interface ContextData {
 	cycles: Cycle[]
