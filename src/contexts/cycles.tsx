@@ -93,18 +93,18 @@ export function CyclesProvider({ children }: ProviderProps) {
       })
     )
 
-		setActiveCycleId(null)
-		setTimePassed(0)
+    setActiveCycleId(null)
+    setTimePassed(0)
 
-		toast.error('Cycle aborted!', {
-			position: 'top-left',
-			autoClose: 4000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-		})
+    toast.error('Cycle aborted!', {
+      position: 'top-left',
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
   }
 
   const activeCycle: Cycle = cycles.find((cycle) => cycle.id === activeCycleId)

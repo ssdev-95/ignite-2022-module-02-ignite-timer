@@ -1,23 +1,18 @@
 import { formatDistanceToNow } from 'date-fns'
 import { useCycle } from '../../contexts/cycles'
 
-import {
-	Table,
-	Status,
-	ContentWrapper,
-	HistoryContainer
-} from './styles'
+import { Table, Status, ContentWrapper, HistoryContainer } from './styles'
 
 interface Cycle {
-	id: string
-	minutesAmount: number
-	startTime: Date
-	interruptedAt?: Date
-	conpletedAt?: Date
+  id: string
+  minutesAmount: number
+  startTime: Date
+  interruptedAt?: Date
+  conpletedAt?: Date
 }
 
 export function History() {
-	const { cycles } = useCycle()
+  const { cycles } = useCycle()
 
   return (
     <HistoryContainer>
@@ -33,34 +28,22 @@ export function History() {
             </tr>
           </thead>
           <tbody>
-            {cycles.map((cycle) => (
+            {cycles.map((cycle:Cycle) => (
               <tr key={cycle.id}>
                 <td>{cycle.task}</td>
                 <td>{cycle.minutesAmount} minutes</td>
-                <td>{formatDistanceToNow(
-									cycle.startTime,
-									{ addSuffix: true }
-								)}</td>
                 <td>
-									{cycle.interruptedAt && (<Status
-										status="cancelled"
-									>
-										Aborted
-									</Status>)}
-									{cycle.completedAt && (<Status
-										status="done"
-									>
-										Done
-									</Status>)}
-									{(
-										!cycle.interruptedAt &&
-										!cycle.completedAt
-									) && (<Status
-										status="processing"
-									>
-										Processing
-									</Status>)}
-								</td>
+                  {formatDistanceToNow(cycle.startTime, { addSuffix: true })}
+                </td>
+                <td>
+                  {cycle.interruptedAt && (
+                    <Status status="cancelled">Aborted</Status>
+                  )}
+                  {cycle.completedAt && <Status status="done">Done</Status>}
+                  {!cycle.interruptedAt && !cycle.completedAt && (
+                    <Status status="processing">Processing</Status>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -38,7 +38,7 @@ export function Home() {
     onCreateNewTask,
     onCycleComplete,
     updateTimePassed,
-		handleStopCountdown,
+    handleStopCountdown,
   } = useCycle()
 
   useEffect(() => {
@@ -99,11 +99,7 @@ export function Home() {
               <HandPalm size={24} />
             </Button>
           ) : (
-            <Button
-							disabled={isSubmitDisabled}
-							type="submit"
-							title="Start"
-						>
+            <Button disabled={isSubmitDisabled} type="submit" title="Start">
               <Play size={24} />
             </Button>
           )}
