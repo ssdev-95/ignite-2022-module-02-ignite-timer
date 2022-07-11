@@ -1,29 +1,23 @@
-import { Table, Status, ContentWrapper, HistoryContainer } from './styles'
+import { formatDistanceToNow } from 'date-fns'
+import { useCycle } from '../../contexts/cycles'
+
+import {
+	Table,
+	Status,
+	ContentWrapper,
+	HistoryContainer
+} from './styles'
+
+interface Cycle {
+	id: string
+	minutesAmount: number
+	startTime: Date
+	interruptedAt?: Date
+	conpletedAt?: Date
+}
 
 export function History() {
-  const tasks = [
-    {
-      id: 'qidjdnwkw9fuc_782n',
-      name: 'Study XGH',
-      duration: '30 minutes',
-      start: '3 days ago',
-      status: 'Cancelled',
-    },
-    {
-      id: 'qidIwbUkw9fuc_7a2n',
-      name: 'Ignite time',
-      duration: '30 minutes',
-      start: '1 minute ago',
-      status: 'Processing',
-    },
-    {
-      id: 'h3828zhejd9uc_n13x',
-      name: 'Networking',
-      duration: '25 minutes',
-      start: '1 month ago',
-      status: 'Done',
-    },
-  ]
+	const { cycles } = useCycle()
 
   return (
     <HistoryContainer>
@@ -39,16 +33,34 @@ export function History() {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
-              <tr key={task.id}>
-                <td>{task.name}</td>
-                <td>{task.duration}</td>
-                <td>{task.start}</td>
+            {cycles.map((cycle) => (
+              <tr key={cycle.id}>
+                <td>{cycle.task}</td>
+                <td>{cycle.minutesAmount} minutes</td>
+                <td>{formatDistanceToNow(
+									cycle.startTime,
+									{ addSuffix: true }
+								)}</td>
                 <td>
-                  <Status status={task.status.toLowerCase()}>
-                    {task.status}
-                  </Status>
-                </td>
+									{cycle.interruptedAt && (<Status
+										status="cancelled"
+									>
+										Aborted
+									</Status>)}
+									{cycle.completedAt && (<Status
+										status="done"
+									>
+										Done
+									</Status>)}
+									{(
+										!cycle.interruptedAt &&
+										!cycle.completedAt
+									) && (<Status
+										status="processing"
+									>
+										Processing
+									</Status>)}
+								</td>
               </tr>
             ))}
           </tbody>
@@ -57,3 +69,4 @@ export function History() {
     </HistoryContainer>
   )
 }
+// STATUSES = ['done', 'cancelled', 'processing']

@@ -1,11 +1,4 @@
-import {
-  useState,
-  Dispatch,
-  ReactNode,
-  useContext,
-  createContext,
-  SetStateAction,
-} from 'react'
+import { useState, ReactNode, useContext, createContext } from 'react'
 
 import { toast } from 'react-toastify'
 
@@ -13,18 +6,23 @@ interface ProviderProps {
   children: ReactNode
 }
 
-type SetState<T> = Dispatch<SetStateAction<T>>
+interface Cycle {
+  id: string
+  minutesAmount: number
+  startTime: Date
+  interruptedAt?: Date
+  conpletedAt?: Date
+}
 
 interface ContextData {
   cycles: Cycle[]
   activeCycleId: string | null
   timePassed: number
   activeCycle: Cycle
-  setActiveCycleId: SetState<string>
-  setTimePassed: SetState<number>
-  setCycles: SetState<Cycle[]>
-  onCreateNewTask: (data: NewCycleFormData) => void
+  updateTimePassed: (time: number) => void
+  onCreateNewTask: (data: Cycle) => void
   handleStopCountdown: () => void
+  onCycleComplete: () => void
 }
 
 const CyclesContext = createContext({} as ContextData)
@@ -34,7 +32,7 @@ export function CyclesProvider({ children }: ProviderProps) {
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
   const [timePassed, setTimePassed] = useState(0)
 
-  function onCreateNewTask(data: NewCycleFormData) {
+  function onCreateNewTask(data: Omit<Cycle, 'startTime'>) {
     const id = String(new Date().getTime())
 
     const newCycle: Cycle = {
@@ -59,6 +57,28 @@ export function CyclesProvider({ children }: ProviderProps) {
     })
   }
 
+  function updateTimePassed(time: number) {
+    setTimePassed(time)
+  }
+
+  function onCycleComplete() {
+    setCycles((prev) =>
+      prev.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return {
+            ...cycle,
+            completedAt: new Date(),
+          }
+        }
+
+        return cycle
+      })
+    )
+
+    setActiveCycleId(null)
+    setTimePassed(0)
+  }
+
   function handleStopCountdown() {
     setCycles((prev) =>
       prev.map((cycle) => {
@@ -72,6 +92,19 @@ export function CyclesProvider({ children }: ProviderProps) {
         return cycle
       })
     )
+
+		setActiveCycleId(null)
+		setTimePassed(0)
+
+		toast.error('Cycle aborted!', {
+			position: 'top-left',
+			autoClose: 4000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+		})
   }
 
   const activeCycle: Cycle = cycles.find((cycle) => cycle.id === activeCycleId)
@@ -80,13 +113,12 @@ export function CyclesProvider({ children }: ProviderProps) {
     <CyclesContext.Provider
       value={{
         cycles,
-        setCycles,
         timePassed,
         activeCycle,
         activeCycleId,
-        setTimePassed,
         onCreateNewTask,
-        setActiveCycleId,
+        onCycleComplete,
+        updateTimePassed,
         handleStopCountdown,
       }}
     >

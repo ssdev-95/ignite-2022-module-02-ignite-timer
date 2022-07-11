@@ -1,9 +1,20 @@
+import { useFormContext } from 'react-hook-form'
+
 import { useCycle } from '../../contexts/cycles'
 
 import { TextInput, FormContainer, MinuteAmountInput } from './styles'
 
-export function FormControll({ register }: any) {
+interface Cycle {
+  id: string
+  minutesAmount: number
+  startTime: Date
+  interruptedAt?: Date
+  conpletedAt?: Date
+}
+
+export function FormControll() {
   const { activeCycle, cycles } = useCycle()
+  const { register } = useFormContext()
 
   return (
     <FormContainer>

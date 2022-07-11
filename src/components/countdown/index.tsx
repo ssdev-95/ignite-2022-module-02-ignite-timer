@@ -4,7 +4,11 @@ import { useCycle } from '../../contexts/cycles'
 import { Separator, CountdownWrapper } from './styles'
 
 export function CountdownTimer() {
-  const { timePassed, activeCycleId } = useCycle()
+  const {
+		timePassed,
+		activeCycle,
+		activeCycleId
+	} = useCycle()
 
   const [minutes, seconds] = useMemo<string[]>(() => {
     const minutesAmountInSeconds = activeCycleId

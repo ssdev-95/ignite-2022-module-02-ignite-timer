@@ -5,6 +5,12 @@ export const BUTTON_VARIANT_COLORS = {
   danger: 'red-500',
 } as const
 
+type ButtonVariant = keyof typeof BUTTON_VARIANT_COLORS
+
+interface ButtonBaseProps {
+  variant: ButtonVariant
+}
+
 export const BaseButton = styled.button<ButtonBaseProps>`
   border: 0;
   border-radius: 4px;

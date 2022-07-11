@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { HandPalm, Play } from 'phosphor-react'
 import { differenceInSeconds } from 'date-fns'
-import { useForm } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ToastContainer, toast } from 'react-toastify'
 import * as zod from 'zod'
@@ -23,43 +23,32 @@ export const newCycleFormSchema = zod.object({
     .max(60, 'Task cannot exceed 60 minutes.'),
 })
 
+type NewCycleFormData = zod.infer<typeof newCycleFormSchema>
+
 export function Home() {
-  const { register, handleSubmit, reset, watch } = useForm<NewCycleFormData>({
+  const formContext = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormSchema),
     defaultValues: { task: '', minutesAmount: 0 },
   })
 
+  const { handleSubmit, reset, watch } = formContext
+
   const {
-    setCycles,
     activeCycle,
-    activeCycleId,
-    setTimePassed,
-    setActiveCycleId,
+    onCreateNewTask,
+    onCycleComplete,
+    updateTimePassed,
+		handleStopCountdown,
   } = useCycle()
 
   useEffect(() => {
     let interval: Interval
-    alert(typeof register)
 
     if (activeCycle) {
       interval = setInterval(() => {
         const time = differenceInSeconds(new Date(), activeCycle.startTime)
         if (activeCycle.minutesAmount * 60 === time) {
-          setCycles((prev) =>
-            prev.map((cycle) => {
-              if (cycle.id === activeCycleId) {
-                return {
-                  ...cycle,
-                  completedAt: new Date(),
-                }
-              }
-
-              return cycle
-            })
-          )
-
-          setActiveCycleId(null)
-          setTimePassed(0)
+          onCycleComplete()
 
           toast.success('Cycle completed!', {
             position: 'top-left',
@@ -71,7 +60,7 @@ export function Home() {
             progress: undefined,
           })
         } else {
-          setTimePassed(time)
+          updateTimePassed(time)
         }
       }, 1000)
     }
@@ -82,15 +71,21 @@ export function Home() {
   const task = watch('task')
   const minutesAmount = watch('minutesAmount')
   const isSubmitDisabled = !task.length || !minutesAmount
-  function onSubmit(data: NewCycleFormData) {
-    onCreateNewTask(data)
-    reset()
+  function handleCreateNewTask(data: NewCycleFormData) {
+    try {
+      onCreateNewTask(data)
+      reset()
+    } catch (err) {
+      alert(err)
+    }
   }
   return (
     <>
       <HomeContainer>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControll register={register} />
+        <form onSubmit={handleSubmit(handleCreateNewTask)}>
+          <FormProvider {...formContext}>
+            <FormControll />
+          </FormProvider>
 
           <CountdownTimer />
 
@@ -104,7 +99,11 @@ export function Home() {
               <HandPalm size={24} />
             </Button>
           ) : (
-            <Button disabled={isSubmitDisabled} type="submit" title="Start">
+            <Button
+							disabled={isSubmitDisabled}
+							type="submit"
+							title="Start"
+						>
               <Play size={24} />
             </Button>
           )}
