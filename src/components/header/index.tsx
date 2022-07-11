@@ -1,6 +1,6 @@
-import { NavLink } from 'react-router-dom'
-import { Timer, Coffee, Scroll } from 'phosphor-react'
-import { HeaderContainer } from './styles'
+import { NavLink } from "react-router-dom"
+import { Timer, Coffee, Scroll } from "phosphor-react"
+import { HeaderContainer } from "./styles"
 
 export function Header() {
   return (

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components"
 
 export const HomeContainer = styled.main`
   width: 1100px;
@@ -10,7 +10,7 @@ export const HomeContainer = styled.main`
   align-items: center;
   gap: 5rem;
 
-  background-color: ${(props) => props.theme['gray-700']};
+  background-color: ${(props) => props.theme["gray-700"]};
   padding: 2rem;
   border-radius: 8px;
 `
@@ -27,7 +27,7 @@ export const FormContainer = styled.div`
 `
 
 export const BaseInput = styled.input`
-  background-color: ${(props) => props.theme['gray-900']};
+  background-color: ${(props) => props.theme["gray-900"]};
 
   outline: none;
   border: 0;
@@ -35,16 +35,16 @@ export const BaseInput = styled.input`
   font-size: 1.125rem;
   line-height: 1.6;
 
-  border-bottom: 2px solid ${(props) => props.theme['gray-300']};
-  color: ${(props) => props.theme['gray-100']};
+  border-bottom: 2px solid ${(props) => props.theme["gray-300"]};
+  color: ${(props) => props.theme["gray-100"]};
 
   &:focus {
     box-shadow: none;
-    border-bottom: 2px solid ${(props) => props.theme['green-500']};
+    border-bottom: 2px solid ${(props) => props.theme["green-500"]};
   }
 
   &::placeholder {
-    color: ${(props) => props.theme['gray-300']};
+    color: ${(props) => props.theme["gray-300"]};
   }
 `
 
@@ -76,7 +76,7 @@ export const CountdownWrapper = styled.div`
 `
 
 export const Separator = styled.span`
-  color: ${(props) => props.theme['green-300']};
+  color: ${(props) => props.theme["green-300"]};
   font-family: "Roboto Mono", monospace;
 
   @media (max-width: 800px) {
@@ -85,8 +85,8 @@ export const Separator = styled.span`
 `
 
 const BUTTON_VARIANT_COLORS = {
-  default: 'green-300',
-  danger: 'red-500',
+  default: "green-300",
+  danger: "red-500",
 } as const
 
 type ButtonVariant = keyof typeof BUTTON_VARIANT_COLORS
@@ -100,7 +100,7 @@ export const Button = styled.button<ButtonProps>`
   border-radius: 4px;
   width: 100%;
   padding: 1rem;
-  color: ${(props) => props.theme['gray-100']};
+  color: ${(props) => props.theme["gray-100"]};
   background-color: ${(props) =>
     props.theme[BUTTON_VARIANT_COLORS[props.variant]]};
   cursor: pointer;

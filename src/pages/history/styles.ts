@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components"
 
 export const HistoryContainer = styled.div`
   min-height: calc(100vh - 10rem);
@@ -9,7 +9,7 @@ export const HistoryContainer = styled.div`
   padding: 1.45rem;
 
   h1 {
-    color: ${(props) => props.theme['gray-100']};
+    color: ${(props) => props.theme["gray-100"]};
     align-self: flex-start;
   }
 `
@@ -27,18 +27,18 @@ export const Table = styled.table`
   border-collapse: collapse;
 
   thead {
-    background: ${(props) => props.theme['gray-600']};
+    background: ${(props) => props.theme["gray-600"]};
   }
 
   tbody {
-    background: ${(props) => props.theme['gray-700']};
+    background: ${(props) => props.theme["gray-700"]};
   }
 
   tr {
     display: flex;
     td {
-      border-top: 3px solid ${(props) => props.theme['gray-900']};
-      color: ${(props) => props.theme['gray-300']};
+      border-top: 3px solid ${(props) => props.theme["gray-900"]};
+      color: ${(props) => props.theme["gray-300"]};
     }
   }
 
@@ -56,9 +56,9 @@ export const Table = styled.table`
 `
 
 const STATUSES = {
-  done: 'green-500',
-  cancelled: 'red-500',
-  processing: 'yellow-500',
+  done: "green-500",
+  cancelled: "red-500",
+  processing: "yellow-500",
 } as const
 
 type StatusType = keyof typeof STATUSES
@@ -68,7 +68,7 @@ interface StatusProps {
 }
 
 export const Status = styled.span<StatusProps>`
-  color: ${(props) => props.theme['gray-100']};
+  color: ${(props) => props.theme["gray-100"]};
   display: flex;
   gap: 0.5rem;
   align-items: center;
