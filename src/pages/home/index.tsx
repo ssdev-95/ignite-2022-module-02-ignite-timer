@@ -1,8 +1,9 @@
 import { useState, useMemo, useEffect } from "react"
-import { Play } from "phosphor-react"
+import { HandPalm, Play } from "phosphor-react"
 import { differenceInSeconds } from "date-fns"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ToastContainer, toast } from 'react-toastify'
 import * as zod from "zod"
 
 import {
@@ -15,11 +16,13 @@ import {
   MinuteAmountInput,
 } from "./styles"
 
+import 'react-toastify/dist/ReactToastify.css'
+
 const newCycleFormSchema = zod.object({
   task: zod.string().min(1, "No empty task allowed"),
   minutesAmount: zod
     .number()
-    .min(5, "Task should take at least 5 minutes.")
+    .min(1, "Task should take at least 5 minutes.")
     .max(60, "Task cannot exceed 60 minutes."),
 })
 
@@ -30,6 +33,8 @@ interface Cycle {
   task: string
   minutesAmount: number
   startTime: Date
+	interruptedAt?: Date
+	conpletedAt?: Date
 }
 
 export function Home() {
@@ -54,6 +59,18 @@ export function Home() {
 
     setCycles((prev) => [...prev, newCycle])
     setActiveCycleId(id)
+		setTimePassed(0)
+
+
+		toast.success('Cycle started!', {
+			position: "top-left",
+			autoClose: 4000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+		})
 
     reset()
   }
@@ -79,17 +96,74 @@ export function Home() {
     if (activeCycle) {
       interval = setInterval(() => {
         const time = differenceInSeconds(new Date(), activeCycle.startTime)
-        setTimePassed(time)
+				if((activeCycle.minutesAmount * 60) === time) {
+					setCycles(
+						prev => prev.map(cycle => {
+							if(cycle.id === activeCycleId) {
+								return {
+									...cycle,
+									completedAt: new Date()
+								}
+							}
+
+							return cycle
+						})
+					)
+
+					setActiveCycleId(null)
+					setTimePassed(0)
+
+					toast.success('Cycle completed!', {
+						position: "top-left",
+						autoClose: 4000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					})
+				} else {
+					setTimePassed(time)
+				}
       }, 1000)
     }
 
     return () => clearInterval(interval)
   }, [activeCycle])
 
+	function handleStopCountdown() {
+		setCycles(
+			prev => prev.map(cycle => {
+				if(cycle.id === activeCycleId) {
+					return {
+						...cycle,
+						interruptedAt: new Date()
+					}
+				}
+
+				return cycle
+			})
+		)
+
+		toast.error('Cycle aborted!', {
+			position: "top-left",
+			autoClose: 4000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+		})
+
+		setActiveCycleId(null)
+		setTimePassed(0)
+	}
+
   const task = watch("task")
   const minutesAmount = watch("minutesAmount")
   const isSubmitDisabled = !task.length || !minutesAmount
   return (
+	<>
     <HomeContainer>
       <form onSubmit={handleSubmit(onCreateNewTask)}>
         <FormContainer>
@@ -98,6 +172,7 @@ export function Home() {
             id="task"
             placeholder="Deploy na sexta."
             list="tasks"
+						disabled={!!activeCycle}
             {...register("task")}
           />
           <datalist id="tasks">
@@ -111,10 +186,11 @@ export function Home() {
           <MinuteAmountInput
             type="number"
             placeholder="00"
-            step={5}
-            min={5}
+            step={1}
+            min={1}
             max={60}
             id="minutesAmount"
+						disabled={!!activeCycle}
             {...register("minutesAmount", {
               valueAsNumber: true,
             })}
@@ -135,12 +211,37 @@ export function Home() {
             <span>{seconds[1]}</span>
           </div>
         </CountdownWrapper>
-
-        <Button disabled={isSubmitDisabled} variant="default">
-          <Play size={24} />
-          Start
-        </Button>
+				{!!activeCycle ? (
+					<Button
+						onClick={handleStopCountdown}
+						variant="danger"
+					>
+						<HandPalm size={24} />
+						Stop
+					</Button>
+				) : (
+	        <Button
+						disabled={isSubmitDisabled}
+						variant="default"
+					>
+			      <Play size={24} />
+				    Start
+					</Button>
+				)}
       </form>
-    </HomeContainer>
-  )
+		</HomeContainer>
+		<ToastContainer
+			position="top-right"
+			autoClose={4000}
+			hideProgressBar={false}
+			newestOnTop={false}
+			theme="colored"
+			closeOnClick
+			rtl={false}
+			pauseOnFocusLoss
+			draggable
+			pauseOnHover
+		/>
+  </>
+	)
 }
