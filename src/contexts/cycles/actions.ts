@@ -3,8 +3,8 @@ import { produce } from 'immer'
 import { Cycle, CycleReducerState } from './reducers'
 
 export interface Action {
-	type: string
-	payload?: { newCycle: Cycle }
+  type: string
+  payload?: { newCycle: Cycle }
 }
 
 export enum ActionTypes {
@@ -14,49 +14,41 @@ export enum ActionTypes {
 }
 
 export function addNewCycleAction(
-	state: CycleReducerState,
-	{ payload: { newCycle } }: Action
+  state: CycleReducerState,
+  { payload: { newCycle } }: Action
 ) {
   return produce(state, (draft) => {
-		draft.cycles.push(newCycle)
-		draft.activeCycleId = newCycle.id
+    draft.cycles.push(newCycle)
+    draft.activeCycleId = newCycle.id
   })
 }
 
-export function interruptCycleAction(
-	state: CycleReducerState
-) {
-	const activeCycleIndex = state.cycles.findIndex(
-		cycle => cycle.id === state.activeCycleId
-	)
+export function interruptCycleAction(state: CycleReducerState) {
+  const activeCycleIndex = state.cycles.findIndex(
+    (cycle) => cycle.id === state.activeCycleId
+  )
 
-	if(activeCycleIndex === -1) {
-		return state
-	}
-
-	return produce(state, (draft) => {
-		draft
-		 .cycles[activeCycleIndex]
-		 .interruptedAt = new Date()
-		draft.activeCycleId = null
-	})
-}
-
-export function completeCycleAction(
-	state: CycleReducerState
-) {
-	const activeCycleIndex = state.cycles.findIndex(
-		cycle => cycle.id === state.activeCycleId
-	)
-
-	if(activeCycleIndex === -1) {
-		return state
-	}
+  if (activeCycleIndex === -1) {
+    return state
+  }
 
   return produce(state, (draft) => {
-		draft
-		  .cycles[activeCycleIndex]
-			.completedAt = new Date()
-		draft.activeCycleId = null
-	})
+    draft.cycles[activeCycleIndex].interruptedAt = new Date()
+    draft.activeCycleId = null
+  })
+}
+
+export function completeCycleAction(state: CycleReducerState) {
+  const activeCycleIndex = state.cycles.findIndex(
+    (cycle) => cycle.id === state.activeCycleId
+  )
+
+  if (activeCycleIndex === -1) {
+    return state
+  }
+
+  return produce(state, (draft) => {
+    draft.cycles[activeCycleIndex].completedAt = new Date()
+    draft.activeCycleId = null
+  })
 }

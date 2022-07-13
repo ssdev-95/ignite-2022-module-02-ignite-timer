@@ -76,7 +76,7 @@ export const Status = styled.span<StatusProps>`
   width: 100%;
 
   &::before {
-    content: "";
+    content: '';
     height: 0.5rem;
     width: 0.5rem;
     background: ${(props) => props.theme[STATUSES[props.status]]};

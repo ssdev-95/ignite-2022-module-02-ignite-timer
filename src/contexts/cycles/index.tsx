@@ -38,9 +38,9 @@ export function CyclesProvider({ children }: ProviderProps) {
 
   const { activeCycleId, cycles } = cycleState
 
-	function updateTimePassed(time: number) {
-		setTimePassed(time)
-	}
+  function updateTimePassed(time: number) {
+    setTimePassed(time)
+  }
 
   function onCreateNewTask(data: Omit<Cycle, 'startTime'>) {
     const id = String(new Date().getTime())
@@ -57,7 +57,7 @@ export function CyclesProvider({ children }: ProviderProps) {
       payload: { newCycle },
     })
 
-    updateTimePassed((data.minutesAmount * 60))
+    updateTimePassed(data.minutesAmount * 60)
 
     toast.success('Cycle started!', {
       position: 'top-left',
@@ -106,14 +106,14 @@ export function CyclesProvider({ children }: ProviderProps) {
         onCreateNewTask,
         onCycleComplete,
         updateTimePassed,
-				handleStopCountdown,
-			}}
-		>
-			{children}
-		</CyclesContext.Provider>
-	)
+        handleStopCountdown,
+      }}
+    >
+      {children}
+    </CyclesContext.Provider>
+  )
 }
 
 export function useCycle() {
-	return useContext(CyclesContext)
+  return useContext(CyclesContext)
 }

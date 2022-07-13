@@ -1,9 +1,9 @@
 import {
-	Action,
-	ActionTypes,
-	addNewCycleAction,
-	completeCycleAction,
-	interruptCycleAction
+  Action,
+  ActionTypes,
+  addNewCycleAction,
+  completeCycleAction,
+  interruptCycleAction,
 } from './actions'
 
 export interface Cycle {
@@ -19,10 +19,7 @@ export interface CycleReducerState {
   activeCycleId: string | null
 }
 
-export function cyclesReducer(
-  state: CycleReducerState, action: Action
-) {
-
+export function cyclesReducer(state: CycleReducerState, action: Action) {
   switch (action.type) {
   case ActionTypes.ADD_NEW_CYCLE_ACTION:
     return addNewCycleAction(state, action)
