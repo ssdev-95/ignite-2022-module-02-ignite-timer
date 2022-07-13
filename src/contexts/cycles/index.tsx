@@ -1,10 +1,13 @@
 import {
   useState,
+  useEffect,
   ReactNode,
   useReducer,
   useContext,
   createContext,
 } from 'react'
+
+import { differenceInSeconds } from 'date-fns'
 
 import { toast } from 'react-toastify'
 
@@ -26,17 +29,41 @@ interface ContextData {
   onCycleComplete: () => void
 }
 
+const storeKey = '@ignite-timero:cycle-state-1.0.0'
+
 const CyclesContext = createContext({} as ContextData)
 
 export function CyclesProvider({ children }: ProviderProps) {
-  const [timePassed, setTimePassed] = useState(0)
+  const [cycleState, dispatch] = useReducer(
+    cyclesReducer,
+    {
+      cycles: [],
+      activeCycleId: null,
+    },
+    () => {
+      const storedCycleState = localStorage.getItem(storeKey)
 
-  const [cycleState, dispatch] = useReducer(cyclesReducer, {
-    cycles: [],
-    activeCycleId: null,
-  })
+      if (storedCycleState) {
+        return JSON.parse(storedCycleState)
+      }
+    }
+  )
 
   const { activeCycleId, cycles } = cycleState
+  const activeCycle: Cycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
+  const [timePassed, setTimePassed] = useState(() => {
+    if (activeCycle) {
+      return differenceInSeconds(new Date(), new Date(activeCycle.startTime))
+    }
+
+    return 0
+  })
+
+  useEffect(() => {
+    const cyclesJSON = JSON.stringify(cycleState)
+    localStorage.setItem(storeKey, cyclesJSON)
+  }, [cycleState])
 
   function updateTimePassed(time: number) {
     setTimePassed(time)
@@ -93,8 +120,6 @@ export function CyclesProvider({ children }: ProviderProps) {
       progress: undefined,
     })
   }
-
-  const activeCycle: Cycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   return (
     <CyclesContext.Provider

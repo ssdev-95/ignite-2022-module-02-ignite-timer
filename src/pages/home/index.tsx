@@ -46,7 +46,10 @@ export function Home() {
 
     if (activeCycle) {
       interval = setInterval(() => {
-        const time = differenceInSeconds(new Date(), activeCycle.startTime)
+        const time = differenceInSeconds(
+          new Date(),
+          new Date(activeCycle.startTime)
+        )
         if (activeCycle.minutesAmount * 60 === time) {
           onCycleComplete()
 

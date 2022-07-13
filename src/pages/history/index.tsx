@@ -36,7 +36,9 @@ export function History() {
                   &nbsp;minute(s)
                 </td>
                 <td>
-                  {formatDistanceToNow(cycle.startTime, { addSuffix: true })}
+                  {formatDistanceToNow(new Date(cycle.startTime), {
+                    addSuffix: true,
+                  })}
                 </td>
                 <td>
                   {cycle.interruptedAt && (
