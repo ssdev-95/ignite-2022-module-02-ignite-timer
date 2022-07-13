@@ -1,17 +1,18 @@
-import { useState, ReactNode, useContext, createContext } from 'react'
+import {
+  useState,
+  ReactNode,
+  useReducer,
+  useContext,
+  createContext,
+} from 'react'
 
 import { toast } from 'react-toastify'
 
+import { Cycle, cyclesReducer } from './reducers'
+import { ActionTypes } from './actions'
+
 interface ProviderProps {
   children: ReactNode
-}
-
-interface Cycle {
-  id: string
-  minutesAmount: number
-  startTime: Date
-  interruptedAt?: Date
-  conpletedAt?: Date
 }
 
 interface ContextData {
@@ -28,9 +29,17 @@ interface ContextData {
 const CyclesContext = createContext({} as ContextData)
 
 export function CyclesProvider({ children }: ProviderProps) {
-  const [cycles, setCycles] = useState<Cycle[]>([])
-  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
   const [timePassed, setTimePassed] = useState(0)
+
+  /*const [cycles, setCycles] = useState<Cycle[]>([])
+  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)*/
+
+  const [cycleState, dispatch] = useReducer(cyclesReducer, {
+    cycles: [],
+    activeCycleId: null,
+  })
+
+  const { activeCycleId, cycles } = cycleState
 
   function onCreateNewTask(data: Omit<Cycle, 'startTime'>) {
     const id = String(new Date().getTime())
@@ -42,8 +51,13 @@ export function CyclesProvider({ children }: ProviderProps) {
       startTime: new Date(),
     }
 
-    setCycles((prev) => [...prev, newCycle])
-    setActiveCycleId(id)
+    /*setCycles((prev) => [...prev, newCycle])
+    setActiveCycleId(id)*/
+    dispatch({
+      type: ActionTypes.ADD_NEW_CYCLE_ACTION,
+      payload: { newCycle },
+    })
+
     setTimePassed(0)
 
     toast.success('Cycle started!', {
@@ -62,7 +76,7 @@ export function CyclesProvider({ children }: ProviderProps) {
   }
 
   function onCycleComplete() {
-    setCycles((prev) =>
+    /*setCycles((prev) =>
       prev.map((cycle) => {
         if (cycle.id === activeCycleId) {
           return {
@@ -75,12 +89,15 @@ export function CyclesProvider({ children }: ProviderProps) {
       })
     )
 
-    setActiveCycleId(null)
+    setActiveCycleId(null)*/
+    dispatch({
+      type: ActionTypes.INTERRUPT_CYCLE_ACTION,
+    })
     setTimePassed(0)
   }
 
   function handleStopCountdown() {
-    setCycles((prev) =>
+    /*setCycles((prev) =>
       prev.map((cycle) => {
         if (cycle.id === activeCycleId) {
           return {
@@ -93,7 +110,10 @@ export function CyclesProvider({ children }: ProviderProps) {
       })
     )
 
-    setActiveCycleId(null)
+    setActiveCycleId(null)*/
+    dispatch({
+      type: ActionTypes.COMPLETE_CYCLE_ACTION,
+    })
     setTimePassed(0)
 
     toast.error('Cycle aborted!', {
@@ -130,3 +150,11 @@ export function CyclesProvider({ children }: ProviderProps) {
 export function useCycle() {
   return useContext(CyclesContext)
 }
+
+/*
+enum ActionTypes {
+	ADD_NEW_CYCLE_ACTION,
+	INTERRUPT_CYCLE_ACTION,
+	COMPLETE_CYCLE_ACTION
+}
+*/
