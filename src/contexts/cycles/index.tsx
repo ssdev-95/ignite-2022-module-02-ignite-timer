@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import { Cycle, cyclesReducer } from './reducers'
 import { ActionTypes } from './actions'
 
-interface ProviderProps {
+export interface ProviderProps {
   children: ReactNode
 }
 
