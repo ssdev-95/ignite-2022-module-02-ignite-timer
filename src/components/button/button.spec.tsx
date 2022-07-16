@@ -1,24 +1,27 @@
-import { jest } from '@jest/globals'
+/**
+ * @jest-environment jsdom
+ */
 
-import { render, cleanup, fireEvent } from '../../../__test__/utils'
+import { describe, expect, it } from 'vitest'
+import {
+  screen,
+  render,
+  //fireEvent
+} from '../../test/utils'
 
 import { Button } from '../button'
+import { FormControll } from '../form'
 
-beforeEach(cleanup)
+describe('start button should work correctly', () => {
+  //const clickMockFunction = jest.fn()
 
-describe('should sum 1 + 1', () => {
   it('sum should return 2', () => {
     expect(1 + 1).toEqual(2)
   })
 
-  it('should have been clicked', () => {
-    const clickMockFunction = jest.fn()
-    const { getByText } = render(
-      <Button title="Start" onClick={clickMockFunction} />
-    )
+  it('button should appear in the DOM', () => {
+    render(<Button title="Start" />)
 
-    fireEvent.click(getByText('Start'))
-
-    expect(clickMockFunction).toBeCalled()
+    expect(screen.getByRole('button', {name:/Start/i})).toBeInTheDocument()
   })
 })
