@@ -13,7 +13,12 @@ export function Button({
   ...props
 }: ButtonProps) {
   return (
-    <BaseButton variant={variant} {...props}>
+    <BaseButton
+      role="button"
+			id={`test-button-${title.toLowerCase()}`}
+      variant={variant}
+      {...props}
+    >
       {children}
       {title}
     </BaseButton>
